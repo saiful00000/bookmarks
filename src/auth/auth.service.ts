@@ -8,7 +8,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { use } from 'passport';
 
 @Injectable({})
 export class AuthService {
@@ -50,20 +49,15 @@ export class AuthService {
   }
 
 
-  async signJwtToken(userId: number, email: string): Promise<{ access_token: string }> {
+  async signJwtToken(userId: number, email: string):
+    Promise<{ access_token: string }> {
     const payload = { sub: userId, email };
-
     const secret = this.config.get('JWT_SECRET');
-
-    const jwtToken = await this.jwtService.signAsync(
+    const token = await this.jwtService.signAsync(
       payload,
-      {
-        secret: secret,
-        expiresIn: '30m',
-      }
+      { expiresIn: '30m', secret: secret },
     );
-
-    return { access_token: jwtToken };
+    return { access_token: token };
   }
 
 
