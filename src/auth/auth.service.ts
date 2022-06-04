@@ -34,6 +34,8 @@ export class AuthService {
 
       return user;
     } catch (error) {
+      console.log(error);
+      
       if (
         error instanceof
         PrismaClientKnownRequestError
